@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de PDF a Word - Arrastrar y Soltar</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212; /* Fondo oscuro */
+            margin: 0;
+            color: #ffffff; /* Color del texto blanco */
+        }
+        #convertidor {
+            padding: 30px;
+            background-color: #1e1e1e; /* Fondo del convertidor oscuro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            text-align: center;
+            width: 400px;
+        }
+        h1 {
+            color: #ffffff; /* Color del título blanco */
+            margin-bottom: 20px;
+        }
+        #zonaDeArrastre {
+            border: 2px dashed #007bff; /* Color de borde */
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            background-color: #2c2c2c; /* Fondo de la zona de arrastre */
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        #zonaDeArrastre.dragover {
+            border-color: #0056b3; /* Color del borde en arrastre */
+            background-color: #3a3a3a; /* Fondo de la zona de arrastre al arrastrar */
+        }
+        input[type="file"] {
+            display: none;
+        }
+        #salida {
+            margin-top: 20px;
+        }
+        #botonDescargar {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff; /* Color del texto del botón blanco */
+            background-color: #007bff; /* Color de fondo del botón */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #botonDescargar:disabled {
+            background-color: #444; /* Color de fondo del botón deshabilitado */
+            cursor: not-allowed;
+        }
+        #botonDescargar:hover:not(:disabled) {
+            background-color: #0056b3; /* Color de fondo al pasar el mouse */
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.24.0/docxtemplater.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.1/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+<body>
+
+<div id="convertidor">
+    <h1>Arrastra y suelta para convertir a Word</h1>
+    <div id="zonaDeArrastre">Arrastra tus PDFs aquí o haz clic</div>
+    <input type="file" id="entradaArchivos" accept="application/pdf" multiple>
+    <button id="botonDescargar" disabled>Descargar Documentos Word</button>
+    <div id="salida"></div>
+</div>
+
+<script>
+    let zipArchivo = new JSZip();
+    let cantidadArchivos = 0;
+    
+    const zonaDeArrastre = document.getElementById('zonaDeArrastre');
+    const entradaArchivos = document.getElementById('entradaArchivos');
+    const botonDescargar = document.getElementById('botonDescargar');
+    const salida = document.getElementById('salida');
+
+    zonaDeArrastre.addEventListener('click', function() {
+        entradaArchivos.click();
+    });
+    zonaDeArrastre.addEventListener('dragover', function(event) {
+        event.preventDefault();
+        zonaDeArrastre.classList.add('dragover');
+    });
+    zonaDeArrastre.addEventListener('dragleave', function() {
+        zonaDeArrastre.classList.remove('dragover');
+    });
+    zonaDeArrastre.addEventListener('drop', manejarCaida);
+
+    entradaArchivos.addEventListener('change', manejarArchivos);
+    botonDescargar.addEventListener('click', descargarZip);
+
+    function manejarCaida(event) {
+        event.preventDefault();
+        zonaDeArrastre.classList.remove('dragover');
+        const archivos = event.dataTransfer.files;
+        manejarArchivosDesdeEntrada(archivos);
+    }
+
+    function manejarArchivos(event) {
+        const archivos = event.target.files;
+        manejarArchivosDesdeEntrada(archivos);
+    }
+
+    function manejarArchivosDesdeEntrada(archivos) {
+        salida.innerHTML = ''; // Limpiar salida
+        cantidadArchivos = archivos.length;
+        zipArchivo = new JSZip(); 
+        Array.from(archivos).forEach(function(archivo) {
+            procesarPDF(archivo);
+        });
+    }
+
+    async function procesarPDF(archivo) {
+        const arrayBuffer = await archivo.arrayBuffer();
+        const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+        const paginas = pdfDoc.getPages();
+        
+        let textoCompleto = '';
+        
+        for (const pagina of paginas) {
+            const textoPagina = await pagina.getTextContent();
+            textoCompleto += textoPagina.items.map(item => item.str).join(' ') + '\n';
+        }
+        
+        const docxContent = `
+        <html xmlns:w="urn:schemas-microsoft-com:office:word">
+            <head>
+                <meta charset="utf-8">
+                <title>${archivo.name.replace('.pdf', '')}</title>
+            </head>
+            <body>
+                <pre>${textoCompleto}</pre>
+            </body>
+        </html>
+        `;
+        
+        const nombreDocx = archivo.name.replace(/\.[^/.]+$/, "") + ".docx";
+        const zip = new PizZip();
+        zip.file(`${nombreDocx}`, docxContent);
+        zipArchivo.file(nombreDocx, await zip.generateAsync({type: 'blob'}));
+
+        cantidadArchivos--;
+        if (cantidadArchivos === 0) {
+            botonDescargar.disabled = false;
+        }
+    }
+
+    function descargarZip() {
+        zipArchivo.generateAsync({ type: 'blob' }).then(function(contenido) {
+            const enlace = document.createElement('a');
+            enlace.href = URL.createObjectURL(contenido);
+            enlace.download = 'documentos_convertidos.zip';
+            enlace.click();
+        });
+    }
+</script>
+
+</body>
+</html>

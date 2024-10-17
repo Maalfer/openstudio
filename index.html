@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Conversor de Imágenes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Fuente Roboto -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Cambiar a fuente Roboto */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212; /* Fondo negro */
+            margin: 0;
+            color: #ffffff; /* Color del texto blanco */
+            padding-top: 60px; /* Espacio para el encabezado fijo */
+        }
+        header {
+            width: 100%;
+            background-color: #1e1e1e; /* Fondo del encabezado */
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between; /* Espacio entre los elementos del encabezado */
+            position: fixed; /* Posicionamiento fijo */
+            top: 0; /* Anclar el encabezado a la parte superior */
+            z-index: 100; /* Asegurar que el encabezado esté por encima de otros elementos */
+        }
+        .nav-button {
+            color: #ffffff; /* Color del texto blanco */
+            background: transparent; /* Fondo transparente */
+            border: none; /* Sin borde */
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 20px; /* Espaciado entre botones */
+            position: relative; /* Posicionamiento relativo para los menús */
+        }
+        .dropdown {
+            display: none; /* Ocultar menú por defecto */
+            position: absolute; /* Posicionar el menú relativo al botón */
+            background-color: #007bff; /* Color de fondo azul */
+            border-radius: 8px; /* Bordes redondeados */
+            padding: 10px;
+            z-index: 10; /* Asegurar que el menú esté sobre otros elementos */
+        }
+        .nav-button:hover .dropdown {
+            display: block; /* Mostrar menú al pasar el mouse */
+        }
+        .dropdown a {
+            display: block; /* Cada enlace ocupa toda la línea */
+            color: #ffffff; /* Color del texto blanco */
+            text-decoration: none; /* Sin subrayado */
+            padding: 8px 12px; /* Espaciado interno de enlaces */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .dropdown a:hover {
+            background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+        }
+        .menu-toggle {
+            display: flex; /* Para mantener el menú en línea */
+            align-items: center; /* Centrar verticalmente */
+            cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+        }
+        .menu-toggle div {
+            width: 25px; /* Ancho de las rayas */
+            height: 3px; /* Alto de las rayas */
+            background-color: #ffffff; /* Color de las rayas */
+            margin: 3px 0; /* Espaciado entre las rayas */
+            transition: all 0.3s; /* Transición suave */
+        }
+        .menu-toggle:hover .dropdown {
+            display: block; /* Mostrar menú al pasar el mouse */
+        }
+        h1 {
+            color: #007bff; /* Color del título azul */
+            margin-bottom: 20px;
+            font-weight: 700; /* Peso de fuente más grueso */
+        }
+        .contenedor {
+            display: flex;
+            flex-wrap: wrap; /* Permite que las cartas se envuelvan en varias filas */
+            justify-content: center; /* Centra las cartas horizontalmente */
+            max-width: 800px; /* Limita el ancho del contenedor */
+        }
+        .opcion {
+            padding: 20px;
+            font-size: 16px; /* Ajustar tamaño de fuente */
+            color: #ffffff; /* Color del texto blanco */
+            background-color: #007bff; /* Color de fondo azul */
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            width: 200px; /* Ancho del recuadro */
+            text-align: center; /* Centrar texto */
+            transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+            text-decoration: none; /* Sin subrayado */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Sombra para efecto de carta */
+            border: none; /* Sin borde */
+        }
+        .opcion:hover {
+            background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+            transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <button class="nav-button">Imágenes
+            <div class="dropdown">
+                <a href="fondo.html">Quitar Fondo</a>
+                <a href="png.html">Convertir a PNG</a>
+                <a href="webp.html">Convertir a WebP</a>
+            </div>
+        </button>
+        <button class="nav-button">Documentos
+            <div class="dropdown">
+                <a href="pdftoword.html">PDF a Word</a>
+                <a href="wordtopdf.html">Word a PDF</a>
+                <a href="comprimir.html">Comprimir imagen</a>
+                <a href="splitpdf.html">Dividir PDF</a>
+            </div>
+        </button>
+    </div>
+    <div class="menu-toggle">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div class="dropdown">
+            <a href="fondo.html">Opción 1</a>
+            <a href="png.html">Opción 2</a>
+            <a href="webp.html">Opción 3</a>
+        </div>
+    </div>
+</header>
+
+<h1>Selecciona tu tipo de Conversor</h1>
+<div class="contenedor">
+    <a href="fondo.html" class="opcion">Quitar Fondo (Beta)</a>
+    <a href="png.html" class="opcion">Convertir a PNG</a>
+    <a href="webp.html" class="opcion">Convertir a WebP</a>
+    <a href="compresor.html" class="opcion">Comprimir Imágenes</a>
+    <a href="heictopng.html" class="opcion">HEIC a PNG</a>
+    <a href="jpgtopng.html" class="opcion">JPEG a PNG</a>
+    <a href="splitpdf.html" class="opcion">Dividir PDF</a>
+    <a href="ppttopdf.html" class="opcion">PPT a PDF</a>
+</div>
+
+</body>
+</html>
