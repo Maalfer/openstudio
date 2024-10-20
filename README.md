@@ -1,1 +1,1 @@
-Aplicación web para cambiar el formato de imágenes de forma gratuita y sencilla (de momento está muy en fase beta), pero la idea está ahí ;)
+Aplicación web para cambiar el formato de imágenes de forma gratuita y sencilla, aportando el valor de realizar toda la conversión directamente en el navegador, ideal para gestionar documentos con información privada y con la garantía de que no se almacenarán en ningún lugar (de momento está muy en fase beta), pero la idea está ahí ;)
