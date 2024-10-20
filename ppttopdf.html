@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de PowerPoint a PDF - Arrastrar y Soltar</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212; /* Fondo oscuro */
+            margin: 0;
+            color: #ffffff; /* Color del texto blanco */
+        }
+        #convertidor {
+            padding: 30px;
+            background-color: #1e1e1e; /* Fondo del convertidor oscuro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            text-align: center;
+            width: 400px;
+        }
+        h1 {
+            color: #ffffff; /* Color del título blanco */
+            margin-bottom: 20px;
+        }
+        #zonaDeArrastre {
+            border: 2px dashed #007bff; /* Color de borde */
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            background-color: #2c2c2c; /* Fondo de la zona de arrastre */
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        #zonaDeArrastre.dragover {
+            border-color: #0056b3; /* Color del borde en arrastre */
+            background-color: #3a3a3a; /* Fondo de la zona de arrastre al arrastrar */
+        }
+        input[type="file"] {
+            display: none;
+        }
+        #botonDescargar {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff; /* Color del texto del botón blanco */
+            background-color: #007bff; /* Color de fondo del botón */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #botonDescargar:disabled {
+            background-color: #444; /* Color de fondo del botón deshabilitado */
+            cursor: not-allowed;
+        }
+        #botonDescargar:hover:not(:disabled) {
+            background-color: #0056b3; /* Color de fondo al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+
+<div id="convertidor">
+    <h1>Arrastra y suelta para convertir a PDF</h1>
+    <div id="zonaDeArrastre">Arrastra tus archivos PowerPoint aquí o haz clic</div>
+    <input type="file" id="entradaArchivos" accept=".ppt,.pptx" multiple>
+    <button id="botonDescargar" disabled>Descargar PDF</button>
+    <div id="salida"></div>
+</div>
+
+<script>
+    let cantidadArchivos = 0;
+    
+    const zonaDeArrastre = document.getElementById('zonaDeArrastre');
+    const entradaArchivos = document.getElementById('entradaArchivos');
+    const botonDescargar = document.getElementById('botonDescargar');
+    const salida = document.getElementById('salida');
+
+    zonaDeArrastre.addEventListener('click', function() {
+        entradaArchivos.click();
+    });
+    zonaDeArrastre.addEventListener('dragover', function(event) {
+        event.preventDefault();
+        zonaDeArrastre.classList.add('dragover');
+    });
+    zonaDeArrastre.addEventListener('dragleave', function() {
+        zonaDeArrastre.classList.remove('dragover');
+    });
+    zonaDeArrastre.addEventListener('drop', manejarCaida);
+
+    entradaArchivos.addEventListener('change', manejarArchivos);
+    botonDescargar.addEventListener('click', descargarPdf);
+
+    function manejarCaida(event) {
+        event.preventDefault();
+        zonaDeArrastre.classList.remove('dragover');
+        const archivos = event.dataTransfer.files;
+        manejarArchivosDesdeEntrada(archivos);
+    }
+
+    function manejarArchivos(event) {
+        const archivos = event.target.files;
+        manejarArchivosDesdeEntrada(archivos);
+    }
+
+    function manejarArchivosDesdeEntrada(archivos) {
+        salida.innerHTML = ''; // Limpiar salida
+        cantidadArchivos = archivos.length;
+        
+        Array.from(archivos).forEach(function(archivo) {
+            const nombreArchivo = archivo.name;
+            salida.innerHTML += `<p>${nombreArchivo} listo para convertir.</p>`;
+        });
+
+        botonDescargar.disabled = cantidadArchivos === 0;
+    }
+
+    function descargarPdf() {
+        const archivos = entradaArchivos.files;
+        const formData = new FormData();
+
+        Array.from(archivos).forEach((archivo) => {
+            formData.append('files[]', archivo);
+        });
+
+        // Aquí se debe colocar la URL de tu backend que convierte PPTX a PDF
+        fetch('/convertir-a-pdf', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const enlace = document.createElement('a');
+            enlace.href = URL.createObjectURL(blob);
+            enlace.download = 'presentacion_convertida.pdf';
+            enlace.click();
+        })
+        .catch(error => console.error('Error al convertir:', error));
+    }
+</script>
+
+</body>
+</html>
