@@ -1,0 +1,307 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Cambiado de height a min-height para permitir scroll */
+    background-color: #002a39;
+    margin: 0;
+    color: #ffffff;
+    margin-bottom: 60px; /* Debe coincidir con la altura del footer */
+}
+
+
+header {
+    width: 100%;
+    background-color: #1e1e1e;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+}
+
+.nav-button {
+    position: relative;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.nav-button:hover .dropdown {
+    display: block;
+}
+
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 30px;
+    cursor: pointer;
+    position: relative; /* Establecer posición relativa */
+}
+
+.menu-toggle div {
+    width: 30px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.dropdown-menu {
+    display: none; /* Ocultar por defecto */
+    position: absolute; /* Cambiar a posición absoluta */
+    left: 0; /* Alinear a la izquierda del toggle */
+    background-color: #333; /* Fondo del menú desplegable */
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px; /* Espacio entre el toggle y el menú */
+    transition: all 0.3s ease;
+    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+}
+
+.menu-item {
+    color: #ffffff;
+    text-decoration: none;
+    display: block; /* Para que cada enlace ocupe una línea completa */
+    padding: 5px 10px; /* Espaciado interno */
+    transition: background-color 0.3s ease;
+}
+
+.menu-item:hover {
+    background-color: #555; /* Efecto al pasar el cursor */
+}
+
+/* Mostrar el menú desplegable al pasar el cursor sobre el toggle */
+.menu-toggle:hover + .dropdown-menu {
+    display: block; /* Mostrar el menú */
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 3px solid #35d3e8; /* Aumentado a 4 píxeles */
+}
+
+
+.dropdown a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+    transition: background-color 0.3s;
+}
+
+.dropdown a:hover {
+    background-color: #444;
+}
+
+h1 {
+    color: #ffffff;
+    margin-top: 80px; /* Aseguramos que el título no se superponga con el header */
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    gap: 20px;
+    margin: 0 auto;
+}
+
+.opcion {
+    padding: 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #061c20;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 220px;
+    height: 180px;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border: 2px solid #35d3e8; 
+}
+
+
+.opcion h2 {
+    margin-bottom: 8px;
+    font-size: 25px;
+}
+
+.opcion p {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.opcion:hover {
+    background-color: #14e6e6;
+    transform: translateY(-2px);
+}
+
+
+#seccion-galeria {
+    position: relative;
+    padding: 30px;
+    background-color: #002a39; /* Fondo oscuro */
+    overflow: hidden; /* Para ocultar el desbordamiento */
+}
+
+.image-gallery {
+    display: flex; /* Usar flexbox para alinear las imágenes */
+    animation: scroll 80s linear infinite; /* Animación de desplazamiento más lenta */
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0); /* Comienza en la posición original */
+    }
+    100% {
+        transform: translateX(-100%); 
+    }
+}
+
+.image-gallery a {
+    margin: 0 10px;
+}
+
+.image-gallery img {
+    width: 100px; 
+    height: auto; 
+    transition: transform 0.3s; 
+}
+
+/* Efecto de zoom al pasar el cursor */
+.image-gallery a:hover img {
+    transform: scale(1.1); /* Aumenta un poco el tamaño al pasar el cursor */
+}
+
+
+.visible-images {
+    display: flex;
+    animation: slide 60s linear infinite; /* Podemos ajustar la duración para controlar la velocidad */
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-25%); /* Desplaza a la izquierda la mitad del ancho total */
+    }
+}
+
+.visible-images img {
+    width: 2%; /* Ajusta el tamaño de las imágenes */
+    flex-shrink: 0; /* Evita que las imágenes se reduzcan */
+}
+
+footer {
+    background: transparent; /* Elimina el fondo del footer */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 12px 0;
+    text-align: center;
+    z-index: 2; 
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 75%;
+    position: relative;
+    z-index: 3; /* AsegÃºrate de que el contenido estÃ© sobre las olas */
+}
+
+.footer-content p { 
+    margin: 0; 
+}
+
+.footer-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.footer-icon i {
+    font-size: 1.8em;
+    color: #fff;
+}
+
+.footer-icon:hover i { 
+    color: #ccc; 
+}
+
+.footer-link {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-link:hover { 
+    color: #ccc; 
+}
+
+/* Estilos para el contenedor de las olas */
+.wave-container {
+    position: fixed; /* Fijo para que siempre estÃ© al fondo */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Ajusta la altura de las olas */
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Efecto de olas */
+.wave {
+    position: absolute;
+    left: 50%;
+    width: 200%;
+    height: 100px;
+    background: linear-gradient(to right, rgba(20, 21, 28, 0.893) 0%, rgba(26, 28, 45, 0.938) 50%, rgb(26, 33, 48) 100%);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    animation: wave 5s linear infinite; /* AnimaciÃ³n mÃ¡s rÃ¡pida */
+}
+
+.wave.wave2 {
+    height: 120px;
+    background: linear-gradient(to right, rgba(20, 23, 40, 0.982) 0%, rgba(20, 31, 44, 0.776) 50%, rgba(24, 38, 71, 0.2) 100%);
+    animation: wave 5s linear infinite; /* AnimaciÃ³n mÃ¡s rÃ¡pida */
+}
+
+/* AnimaciÃ³n de olas */
+@keyframes wave {
+    0% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(12px); /* Aumentada la amplitud de 10px a 25px */
+    }
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+}
