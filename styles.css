@@ -58,13 +58,25 @@ header {
 .dropdown-menu {
     display: none; /* Ocultar por defecto */
     position: absolute; /* Cambiar a posición absoluta */
-    left: 0; /* Alinear a la izquierda del toggle */
+    right: 0; /* Alinear a la izquierda del toggle */
     background-color: #333; /* Fondo del menú desplegable */
     border-radius: 5px;
     padding: 10px;
-    margin-top: 5px; /* Espacio entre el toggle y el menú */
+    margin-top: 2.5%; /* Espacio entre el toggle y el menú */
     transition: all 0.3s ease;
-    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+    z-index: 9; /* Asegurarse de que esté por encima de otros elementos */
+}
+.dropdown-menu {
+    display: none;/* Ocultar por defecto */
+    position: absolute; /* Cambiar a posición absoluta */
+    right: 0; /* Alinear a la derecha del toggle */
+    background-color: #333; /* Fondo del menú desplegable */
+    border-radius: 0pt 0pt 10pt 10pt;
+    padding: 10pt;
+    padding-top: 20pt;
+    margin-top: 2%; /* Espacio entre el toggle y el menú */
+    transition: all 0.3s ease;
+    z-index: 9; /* Asegurarse de que esté por encima de otros elementos */
 }
 
 .menu-item {
